@@ -26,21 +26,24 @@ export async function POST(request: NextRequest) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const pdf = new PDFParse({ data: new Uint8Array(buffer) });
-    const result = await pdf.getText();
+    try {
+      const result = await pdf.getText();
+      const text = result.text?.trim() || "";
 
-    const text = result.text?.trim() || "";
+      if (text.length < 50) {
+        return Response.json(
+          {
+            error:
+              "Could not extract sufficient text from PDF. Please ensure it is not a scanned image.",
+          },
+          { status: 400 }
+        );
+      }
 
-    if (text.length < 50) {
-      return Response.json(
-        {
-          error:
-            "Could not extract sufficient text from PDF. Please ensure it is not a scanned image.",
-        },
-        { status: 400 }
-      );
+      return Response.json({ text });
+    } finally {
+      await pdf.destroy();
     }
-
-    return Response.json({ text });
   } catch (error) {
     console.error("PDF extraction error:", error);
     return Response.json(
