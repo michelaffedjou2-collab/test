@@ -2,6 +2,7 @@ services:
   - type: web
     name: cv2portfolio-ai
     runtime: node
+    plan: free
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
@@ -9,3 +10,5 @@ services:
         sync: false
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000
