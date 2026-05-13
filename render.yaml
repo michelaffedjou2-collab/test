@@ -14,3 +14,5 @@ services:
         value: 10000
       - key: HOSTNAME
         value: 0.0.0.0
+      - key: ADMIN_PASSWORD
+        sync: false

@@ -17,12 +17,12 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <motion.h2
       variants={fadeInUp}
-      className="text-2xl font-bold text-white mb-6 flex items-center gap-3"
+      className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3"
     >
       <span
         className="w-8 h-0.5 rounded-full"
         style={{
-          background: "linear-gradient(90deg, #667eea, #764ba2)",
+          background: "linear-gradient(90deg, #b8860b, #d4a855)",
         }}
       />
       {children}
@@ -78,7 +78,7 @@ export default function PortfolioPreview({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-4xl md:text-5xl font-bold text-white"
+            className="text-4xl md:text-5xl font-bold text-gray-800"
           >
             {data.fullName}
           </motion.h1>
@@ -97,7 +97,7 @@ export default function PortfolioPreview({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-gray-300 max-w-2xl mx-auto leading-relaxed"
+            className="text-gray-600 max-w-2xl mx-auto leading-relaxed"
           >
             {data.bio}
           </motion.p>
@@ -120,7 +120,7 @@ export default function PortfolioPreview({
             {data.contact.email && (
               <a
                 href={`mailto:${data.contact.email}`}
-                className="px-6 py-2.5 rounded-xl text-white font-medium glass hover:bg-white/10 transition-all"
+                className="px-6 py-2.5 rounded-xl text-gray-700 font-medium glass hover:bg-white/30 transition-all"
               >
                 Contact Me
               </a>
@@ -144,7 +144,7 @@ export default function PortfolioPreview({
               <motion.span
                 key={i}
                 variants={fadeInUp}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-white/90 transition-all hover:scale-105"
+                className="px-4 py-2 rounded-xl text-sm font-medium text-gray-700 transition-all hover:scale-105"
                 style={{
                   background: `linear-gradient(135deg, ${primary}20, ${secondary}20)`,
                   border: `1px solid ${primary}30`,
@@ -179,14 +179,14 @@ export default function PortfolioPreview({
                   className="absolute left-[-5px] top-1 w-2 h-2 rounded-full"
                   style={{ background: primary }}
                 />
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-gray-800">
                   {exp.role}
                 </h3>
                 <p className="text-sm font-medium" style={{ color: accent }}>
                   {exp.company}
                 </p>
                 <p className="text-xs text-gray-400 mt-0.5">{exp.period}</p>
-                <p className="text-gray-300 mt-2 text-sm leading-relaxed">
+                <p className="text-gray-600 mt-2 text-sm leading-relaxed">
                   {exp.description}
                 </p>
               </motion.div>
@@ -216,7 +216,7 @@ export default function PortfolioPreview({
                   border: `1px solid ${primary}15`,
                 }}
               >
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-gray-800">
                   {edu.degree}
                 </h3>
                 <p className="text-sm" style={{ color: accent }}>
@@ -224,7 +224,7 @@ export default function PortfolioPreview({
                 </p>
                 <p className="text-xs text-gray-400 mt-0.5">{edu.period}</p>
                 {edu.description && (
-                  <p className="text-gray-300 mt-2 text-sm">
+                  <p className="text-gray-600 mt-2 text-sm">
                     {edu.description}
                   </p>
                 )}
@@ -255,10 +255,10 @@ export default function PortfolioPreview({
                   border: `1px solid ${primary}20`,
                 }}
               >
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
                   {project.name}
                 </h3>
-                <p className="text-gray-300 text-sm mb-3">
+                <p className="text-gray-600 text-sm mb-3">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -313,7 +313,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">📧</span>
-              <span className="text-sm text-gray-300">{data.contact.email}</span>
+              <span className="text-sm text-gray-600">{data.contact.email}</span>
             </motion.a>
           )}
           {data.contact.phone && (
@@ -327,7 +327,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">📱</span>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-gray-600">
                 {data.contact.phone}
               </span>
             </motion.a>
@@ -345,7 +345,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">💼</span>
-              <span className="text-sm text-gray-300">LinkedIn</span>
+              <span className="text-sm text-gray-600">LinkedIn</span>
             </motion.a>
           )}
           {data.contact.github && (
@@ -361,7 +361,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">🐙</span>
-              <span className="text-sm text-gray-300">GitHub</span>
+              <span className="text-sm text-gray-600">GitHub</span>
             </motion.a>
           )}
           {data.contact.location && (
@@ -374,7 +374,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">📍</span>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-gray-600">
                 {data.contact.location}
               </span>
             </motion.div>
@@ -392,7 +392,7 @@ export default function PortfolioPreview({
               }}
             >
               <span className="text-xl">🌐</span>
-              <span className="text-sm text-gray-300">Website</span>
+              <span className="text-sm text-gray-600">Website</span>
             </motion.a>
           )}
         </div>

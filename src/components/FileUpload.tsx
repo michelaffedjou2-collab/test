@@ -75,15 +75,15 @@ export default function FileUpload({
         onClick={isProcessing ? undefined : handleClick}
         className={`relative rounded-2xl p-8 cursor-pointer transition-all duration-300 ${
           isDragging ? "drop-zone-active" : "glass"
-        } ${isProcessing ? "opacity-50 cursor-not-allowed" : "hover:border-purple-500/50"}`}
+        } ${isProcessing ? "opacity-50 cursor-not-allowed" : "hover:border-amber-500/50"}`}
       >
         <div className="flex flex-col items-center gap-4 text-center">
           <motion.div
             animate={isDragging ? { scale: 1.1 } : { scale: 1 }}
-            className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center"
+            className="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-400/20 flex items-center justify-center"
           >
             <svg
-              className="w-8 h-8 text-purple-400"
+              className="w-8 h-8 text-amber-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -99,24 +99,24 @@ export default function FileUpload({
 
           {fileName ? (
             <div>
-              <p className="text-white font-medium">{fileName}</p>
+              <p className="text-gray-800 font-medium">{fileName}</p>
               <p className="text-sm text-gray-400 mt-1">
                 {isProcessing ? "Processing..." : "Click to change file"}
               </p>
             </div>
           ) : (
             <div>
-              <p className="text-white font-medium">
+              <p className="text-gray-800 font-medium">
                 Drop your CV here or click to browse
               </p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-sm text-gray-500 mt-1">
                 PDF files only, up to 10MB
               </p>
             </div>
           )}
         </div>
 
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/10 via-transparent to-pink-500/10 opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-500/10 via-transparent to-orange-400/10 opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
       </div>
     </motion.div>
   );

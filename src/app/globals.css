@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #030014;
-  --foreground: #e2e8f0;
+  --background: #FAF6F0;
+  --foreground: #2d2a26;
 }
 
 @theme inline {
@@ -56,19 +56,19 @@ body {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(180, 160, 130, 0.2);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(180, 160, 130, 0.3);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, #b8860b 0%, #d4a855 50%, #c4956a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,12 +76,12 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(180, 160, 130, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 160, 130, 0.08) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 .drop-zone-active {
-  border-color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
+  border-color: #b8860b;
+  background: rgba(184, 134, 11, 0.08);
 }

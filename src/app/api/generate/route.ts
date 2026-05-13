@@ -1,12 +1,13 @@
 import { NextRequest } from "next/server";
 import { generatePortfolio } from "@/lib/gemini";
 import { savePortfolio } from "@/lib/storage";
+import { getGeminiApiKey, trackRequest, addUserRecord } from "@/lib/admin";
 import { PortfolioData } from "@/types/portfolio";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!getGeminiApiKey()) {
       return Response.json(
         { error: "Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable." },
         { status: 500 }
@@ -45,6 +46,8 @@ export async function POST(request: NextRequest) {
     };
 
     savePortfolio(portfolio);
+    trackRequest(true);
+    addUserRecord(portfolio);
 
     return Response.json({ portfolio });
   } catch (error: unknown) {
@@ -52,6 +55,8 @@ export async function POST(request: NextRequest) {
 
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
+
+    trackRequest(false, errorMessage);
 
     if (
       errorMessage.includes("429") ||
