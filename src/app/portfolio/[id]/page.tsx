@@ -36,7 +36,7 @@ export default function PortfolioPage() {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    alert("Portfolio link copied to clipboard!");
+    alert("Lien du portfolio copié !");
   };
 
   if (loading) {
@@ -51,7 +51,7 @@ export default function PortfolioPage() {
           <div className="w-12 h-12 rounded-full mx-auto mb-4 animate-spin-slow" style={{
             background: "conic-gradient(from 0deg, #b8860b, #d4a855, #c4956a, #b8860b)",
           }} />
-          <p className="text-gray-500">Loading portfolio...</p>
+          <p className="text-gray-500">Chargement du portfolio...</p>
         </motion.div>
       </main>
     );
@@ -68,17 +68,17 @@ export default function PortfolioPage() {
         >
           <span className="text-4xl mb-4 block">😔</span>
           <h2 className="text-xl font-semibold text-gray-800 mb-2">
-            Portfolio Not Found
+            Portfolio introuvable
           </h2>
           <p className="text-gray-500 text-sm mb-6">
-            This portfolio may have expired or the link is invalid. Portfolios
-            are stored temporarily in memory.
+            Ce portfolio a peut-être expiré ou le lien est invalide. Les portfolios
+            sont stockés temporairement en mémoire.
           </p>
           <Link
             href="/"
             className="inline-block px-6 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-amber-600 to-orange-500 hover:scale-105 transition-transform"
           >
-            Create Your Portfolio
+            Créer votre Portfolio
           </Link>
         </motion.div>
       </main>

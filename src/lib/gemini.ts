@@ -61,7 +61,7 @@ CV Text:
 export async function generatePortfolio(cvText: string): Promise<string> {
   const apiKey = getGeminiApiKey();
   if (!apiKey) {
-    throw new Error("Gemini API key is not configured.");
+    throw new Error("La clé API Gemini n'est pas configurée.");
   }
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
