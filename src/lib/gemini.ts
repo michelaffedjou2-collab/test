@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+import { getGeminiApiKey } from "@/lib/admin";
 
 const PROMPT = `You are a professional portfolio generator. Analyze the following CV/resume text and extract structured information. Return ONLY valid JSON (no markdown, no code blocks) with this exact structure:
 
@@ -60,6 +59,11 @@ CV Text:
 `;
 
 export async function generatePortfolio(cvText: string): Promise<string> {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
     generationConfig: {

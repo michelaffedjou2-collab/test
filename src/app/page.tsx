@@ -88,7 +88,7 @@ export default function Home() {
               <div className="flex justify-center mb-8">
                 <button
                   onClick={handleReset}
-                  className="glass px-6 py-2.5 rounded-xl text-white/70 hover:text-white text-sm transition-all hover:scale-105"
+                  className="glass px-6 py-2.5 rounded-xl text-gray-600 hover:text-gray-800 text-sm transition-all hover:scale-105"
                 >
                   &larr; Generate Another Portfolio
                 </button>
@@ -109,9 +109,9 @@ export default function Home() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full text-sm text-purple-300"
+                  className="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full text-sm text-amber-700"
                 >
-                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   Powered by Gemini AI
                 </motion.div>
 
@@ -121,7 +121,7 @@ export default function Home() {
                   transition={{ duration: 0.8, delay: 0.1 }}
                   className="text-5xl md:text-7xl font-bold leading-tight"
                 >
-                  <span className="text-white">Transform Your CV</span>
+                  <span className="text-gray-800">Transform Your CV</span>
                   <br />
                   <span className="text-gradient">Into a Portfolio</span>
                 </motion.h1>
@@ -130,7 +130,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
-                  className="text-lg text-gray-400 max-w-xl mx-auto"
+                  className="text-lg text-gray-500 max-w-xl mx-auto"
                 >
                   Upload your CV and watch AI create a stunning, modern
                   portfolio website in seconds. No design skills needed.
@@ -150,9 +150,9 @@ export default function Home() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="mt-6 max-w-xl mx-auto glass rounded-xl p-4 border border-red-500/30 bg-red-500/10"
+                    className="mt-6 max-w-xl mx-auto glass rounded-xl p-4 border border-red-400/30 bg-red-50"
                   >
-                    <p className="text-red-300 text-sm text-center">{error}</p>
+                    <p className="text-red-600 text-sm text-center">{error}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -186,13 +186,13 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9 + i * 0.1 }}
-                    className="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform"
+                    className="glass rounded-2xl p-6 text-center hover:scale-105 transition-transform shadow-sm"
                   >
                     <span className="text-3xl mb-3 block">{feature.icon}</span>
-                    <h3 className="text-white font-semibold mb-1">
+                    <h3 className="text-gray-800 font-semibold mb-1">
                       {feature.title}
                     </h3>
-                    <p className="text-sm text-gray-400">{feature.desc}</p>
+                    <p className="text-sm text-gray-500">{feature.desc}</p>
                   </motion.div>
                 ))}
               </motion.div>
@@ -202,11 +202,11 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}
-                className="mt-20 text-center text-sm text-gray-500"
+                className="mt-20 text-center text-sm text-gray-400"
               >
                 <p>
                   Created by{" "}
-                  <span className="text-purple-400">Michel Affedjou</span>
+                  <span className="text-amber-700">Michel Affedjou</span>
                 </p>
                 <p className="text-xs mt-1">
                   Responsable de Projet Innovant at Ehuzu Learning Lab

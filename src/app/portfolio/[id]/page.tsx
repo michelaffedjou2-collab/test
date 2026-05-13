@@ -49,9 +49,9 @@ export default function PortfolioPage() {
           className="text-center z-10"
         >
           <div className="w-12 h-12 rounded-full mx-auto mb-4 animate-spin-slow" style={{
-            background: "conic-gradient(from 0deg, #667eea, #764ba2, #f093fb, #667eea)",
+            background: "conic-gradient(from 0deg, #b8860b, #d4a855, #c4956a, #b8860b)",
           }} />
-          <p className="text-gray-400">Loading portfolio...</p>
+          <p className="text-gray-500">Loading portfolio...</p>
         </motion.div>
       </main>
     );
@@ -67,16 +67,16 @@ export default function PortfolioPage() {
           className="text-center z-10 glass rounded-2xl p-8 max-w-md mx-4"
         >
           <span className="text-4xl mb-4 block">😔</span>
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">
             Portfolio Not Found
           </h2>
-          <p className="text-gray-400 text-sm mb-6">
+          <p className="text-gray-500 text-sm mb-6">
             This portfolio may have expired or the link is invalid. Portfolios
             are stored temporarily in memory.
           </p>
           <Link
             href="/"
-            className="inline-block px-6 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-purple-600 to-pink-600 hover:scale-105 transition-transform"
+            className="inline-block px-6 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-amber-600 to-orange-500 hover:scale-105 transition-transform"
           >
             Create Your Portfolio
           </Link>
