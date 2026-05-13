@@ -1,6 +1,7 @@
 import { PortfolioData } from "@/types/portfolio";
+import crypto from "crypto";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin2024";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 let geminiApiKey = process.env.GEMINI_API_KEY || "";
 
@@ -33,7 +34,18 @@ const quota: QuotaInfo = {
 const users: UserRecord[] = [];
 
 export function verifyAdminPassword(password: string): boolean {
-  return password === ADMIN_PASSWORD;
+  if (!ADMIN_PASSWORD) return false;
+  try {
+    const a = Buffer.from(password);
+    const b = Buffer.from(ADMIN_PASSWORD);
+    if (a.length !== b.length) {
+      crypto.timingSafeEqual(a, a);
+      return false;
+    }
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
 }
 
 export function getGeminiApiKey(): string {
