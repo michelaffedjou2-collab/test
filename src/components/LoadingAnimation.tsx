@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const steps = [
-  { text: "Extracting CV content...", icon: "📄" },
-  { text: "Analyzing your experience...", icon: "🔍" },
-  { text: "Crafting your portfolio...", icon: "🎨" },
-  { text: "Adding finishing touches...", icon: "✨" },
+  { text: "Extraction du contenu du CV...", icon: "📄" },
+  { text: "Analyse de votre expérience...", icon: "🔍" },
+  { text: "Création de votre portfolio...", icon: "🎨" },
+  { text: "Touches finales en cours...", icon: "✨" },
 ];
 
 export default function LoadingAnimation() {
@@ -79,7 +79,7 @@ export default function LoadingAnimation() {
           transition={{ delay: 1 }}
           className="text-sm text-gray-500"
         >
-          Powered by Gemini AI
+          Propulsé par Gemini AI
         </motion.p>
       </div>
     </div>

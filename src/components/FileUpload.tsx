@@ -18,11 +18,11 @@ export default function FileUpload({
   const handleFile = useCallback(
     (file: File) => {
       if (file.type !== "application/pdf") {
-        alert("Please upload a PDF file");
+        alert("Veuillez uploader un fichier PDF");
         return;
       }
       if (file.size > 10 * 1024 * 1024) {
-        alert("File must be under 10MB");
+        alert("Le fichier doit faire moins de 10 Mo");
         return;
       }
       setFileName(file.name);
@@ -101,16 +101,16 @@ export default function FileUpload({
             <div>
               <p className="text-gray-800 font-medium">{fileName}</p>
               <p className="text-sm text-gray-400 mt-1">
-                {isProcessing ? "Processing..." : "Click to change file"}
+                {isProcessing ? "Traitement en cours..." : "Cliquez pour changer de fichier"}
               </p>
             </div>
           ) : (
             <div>
               <p className="text-gray-800 font-medium">
-                Drop your CV here or click to browse
+                Glissez votre CV ici ou cliquez pour parcourir
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                PDF files only, up to 10MB
+                Fichiers PDF uniquement, jusqu&apos;à 10 Mo
               </p>
             </div>
           )}

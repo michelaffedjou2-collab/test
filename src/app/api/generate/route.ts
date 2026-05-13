@@ -5,11 +5,27 @@ import { getGeminiApiKey, trackRequest, addUserRecord } from "@/lib/admin";
 import { PortfolioData } from "@/types/portfolio";
 import { v4 as uuidv4 } from "uuid";
 
+async function tryGenerate(cvText: string, retries = 1): Promise<string> {
+  try {
+    return await generatePortfolio(cvText);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "";
+    if (
+      retries > 0 &&
+      (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("quota"))
+    ) {
+      await new Promise((r) => setTimeout(r, 5000));
+      return tryGenerate(cvText, retries - 1);
+    }
+    throw err;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (!getGeminiApiKey()) {
       return Response.json(
-        { error: "Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable." },
+        { error: "La clé API Gemini n'est pas configurée. Veuillez définir la variable d'environnement GEMINI_API_KEY." },
         { status: 500 }
       );
     }
@@ -19,12 +35,12 @@ export async function POST(request: NextRequest) {
 
     if (!cvText || typeof cvText !== "string" || cvText.trim().length < 50) {
       return Response.json(
-        { error: "CV text is too short or missing" },
+        { error: "Le texte du CV est trop court ou manquant" },
         { status: 400 }
       );
     }
 
-    const jsonString = await generatePortfolio(cvText);
+    const jsonString = await tryGenerate(cvText);
     const parsed = JSON.parse(jsonString);
 
     const portfolio: PortfolioData = {
@@ -66,7 +82,7 @@ export async function POST(request: NextRequest) {
       return Response.json(
         {
           error:
-            "Free API quota exceeded. The Gemini API free tier has limited requests per minute. Please wait a moment and try again.",
+            "Votre quota d'API gratuite est dépassé. L'offre gratuite de l'API Gemini est limitée en nombre de requêtes par minute. Veuillez patienter quelques instants et réessayer.",
         },
         { status: 429 }
       );
@@ -77,13 +93,13 @@ export async function POST(request: NextRequest) {
       errorMessage.includes("403")
     ) {
       return Response.json(
-        { error: "Invalid Gemini API key. Please check your configuration." },
+        { error: "Clé API Gemini invalide. Veuillez vérifier votre configuration." },
         { status: 403 }
       );
     }
 
     return Response.json(
-      { error: "Failed to generate portfolio. Please try again." },
+      { error: "Échec de la génération du portfolio. Veuillez réessayer." },
       { status: 500 }
     );
   }

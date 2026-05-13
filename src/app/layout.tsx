@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CV2Portfolio AI - Transform Your CV Into a Stunning Portfolio",
+  title: "CV2Portfolio AI - Transformez votre CV en portfolio",
   description:
-    "Upload your CV and let AI generate a beautiful, modern portfolio website in seconds. Powered by Gemini AI.",
-  keywords: ["portfolio", "CV", "resume", "AI", "generator"],
+    "Uploadez votre CV et laissez l'IA générer un magnifique portfolio moderne en quelques secondes. Propulsé par Gemini AI.",
+  keywords: ["portfolio", "CV", "resume", "IA", "générateur"],
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
