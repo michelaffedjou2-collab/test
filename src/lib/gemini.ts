@@ -90,8 +90,9 @@ async function callGeminiModel(
 export function isQuotaError(msg: string): boolean {
   const lower = msg.toLowerCase();
   return (
-    lower.includes("429") ||
+    /\b429\b/.test(lower) ||
     lower.includes("resource_exhausted") ||
+    lower.includes("too many requests") ||
     lower.includes("rate limit") ||
     (lower.includes("resource") && lower.includes("exhausted"))
   );
@@ -103,7 +104,7 @@ export function isInvalidKeyError(msg: string): boolean {
     lower.includes("api_key_invalid") ||
     lower.includes("api key not valid") ||
     lower.includes("permission_denied") ||
-    (lower.includes("403") && !lower.includes("quota"))
+    (/\b403\b/.test(lower) && !lower.includes("quota"))
   );
 }
 
