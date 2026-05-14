@@ -1,31 +1,15 @@
 import { NextRequest } from "next/server";
-import { generatePortfolio } from "@/lib/gemini";
+import { generatePortfolio, isQuotaError, isInvalidKeyError } from "@/lib/gemini";
 import { savePortfolio } from "@/lib/storage";
 import { getGeminiApiKey, trackRequest, addUserRecord } from "@/lib/admin";
 import { PortfolioData } from "@/types/portfolio";
 import { v4 as uuidv4 } from "uuid";
 
-async function tryGenerate(cvText: string, retries = 1): Promise<string> {
-  try {
-    return await generatePortfolio(cvText);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "";
-    if (
-      retries > 0 &&
-      (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("quota"))
-    ) {
-      await new Promise((r) => setTimeout(r, 5000));
-      return tryGenerate(cvText, retries - 1);
-    }
-    throw err;
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     if (!getGeminiApiKey()) {
       return Response.json(
-        { error: "La clé API Gemini n'est pas configurée. Veuillez définir la variable d'environnement GEMINI_API_KEY." },
+        { error: "La clé API Gemini n'est pas configurée. Veuillez définir la variable d'environnement GEMINI_API_KEY ou la configurer depuis le panel admin." },
         { status: 500 }
       );
     }
@@ -40,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const jsonString = await tryGenerate(cvText);
+    const jsonString = await generatePortfolio(cvText);
     const parsed = JSON.parse(jsonString);
 
     const portfolio: PortfolioData = {
@@ -67,39 +51,36 @@ export async function POST(request: NextRequest) {
 
     return Response.json({ portfolio });
   } catch (error: unknown) {
-    console.error("Generation error:", error);
-
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
 
+    console.error("[Generate] Error:", errorMessage);
     trackRequest(false, errorMessage);
 
-    if (
-      errorMessage.includes("429") ||
-      errorMessage.includes("quota") ||
-      errorMessage.includes("RESOURCE_EXHAUSTED")
-    ) {
+    if (isInvalidKeyError(errorMessage)) {
       return Response.json(
         {
           error:
-            "Votre quota d'API gratuite est dépassé. L'offre gratuite de l'API Gemini est limitée en nombre de requêtes par minute. Veuillez patienter quelques instants et réessayer.",
+            "La clé API Gemini est invalide ou révoquée. Veuillez générer une nouvelle clé sur https://aistudio.google.com/apikey et la mettre à jour dans le panel admin.",
+        },
+        { status: 403 }
+      );
+    }
+
+    if (isQuotaError(errorMessage)) {
+      return Response.json(
+        {
+          error:
+            "Le quota de l'API Gemini est temporairement dépassé. Veuillez patienter 1 à 2 minutes et réessayer. Si le problème persiste, vérifiez que votre clé API est toujours valide sur https://aistudio.google.com/apikey.",
         },
         { status: 429 }
       );
     }
 
-    if (
-      errorMessage.includes("API_KEY_INVALID") ||
-      errorMessage.includes("403")
-    ) {
-      return Response.json(
-        { error: "Clé API Gemini invalide. Veuillez vérifier votre configuration." },
-        { status: 403 }
-      );
-    }
-
     return Response.json(
-      { error: "Échec de la génération du portfolio. Veuillez réessayer." },
+      {
+        error: `Échec de la génération du portfolio. Détails : ${errorMessage}`,
+      },
       { status: 500 }
     );
   }
