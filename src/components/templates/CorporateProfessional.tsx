@@ -197,6 +197,16 @@ export default function CorporateProfessional({ data }: { data: PortfolioData })
                   <span>💼</span> LinkedIn
                 </motion.a>
               )}
+              {data.contact.github && (
+                <motion.a variants={fadeIn} href={data.contact.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-600 hover:text-slate-800">
+                  <span>🐙</span> GitHub
+                </motion.a>
+              )}
+              {data.contact.website && (
+                <motion.a variants={fadeIn} href={data.contact.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-600 hover:text-slate-800">
+                  <span>🌐</span> Website
+                </motion.a>
+              )}
             </div>
           </motion.section>
         </div>
