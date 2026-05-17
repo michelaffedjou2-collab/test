@@ -120,7 +120,7 @@ export default function CreativeDesigner({ data }: { data: PortfolioData }) {
               <motion.span
                 key={i}
                 variants={fadeIn}
-                whileHover={{ scale: 1.1, rotate: Math.random() > 0.5 ? 2 : -2 }}
+                whileHover={{ scale: 1.1, rotate: i % 2 === 0 ? 2 : -2 }}
                 className={`px-5 py-2.5 rounded-2xl text-sm font-semibold text-white bg-gradient-to-r ${colors[i % colors.length]} shadow-lg cursor-default`}
               >
                 {skill}

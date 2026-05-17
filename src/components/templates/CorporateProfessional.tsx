@@ -125,6 +125,12 @@ export default function CorporateProfessional({ data }: { data: PortfolioData })
             Site web
           </a>
         )}
+        {data.contact.location && (
+          <span className="flex items-center gap-2 text-sm text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            {data.contact.location}
+          </span>
+        )}
       </motion.section>
 
       {/* Main Content: 2 columns */}
