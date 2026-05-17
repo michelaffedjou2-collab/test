@@ -81,11 +81,25 @@ export default function Home() {
     }
   }, []);
 
+  const persistPortfolio = useCallback(async (data: PortfolioData) => {
+    try {
+      await fetch(`/api/portfolio/${data.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+    } catch {
+      // best-effort persist
+    }
+  }, []);
+
   const handleTemplateConfirm = useCallback(() => {
     if (!portfolio) return;
-    setPortfolio({ ...portfolio, template: selectedTemplate });
+    const updated = { ...portfolio, template: selectedTemplate };
+    setPortfolio(updated);
     setStep("portfolio");
-  }, [portfolio, selectedTemplate]);
+    persistPortfolio(updated);
+  }, [portfolio, selectedTemplate, persistPortfolio]);
 
   const handleShare = useCallback(() => {
     if (!portfolio) return;
@@ -103,7 +117,8 @@ export default function Home() {
 
   const handlePortfolioUpdate = useCallback((updated: PortfolioData) => {
     setPortfolio(updated);
-  }, []);
+    persistPortfolio(updated);
+  }, [persistPortfolio]);
 
   return (
     <main className="relative min-h-screen bg-grid overflow-hidden">

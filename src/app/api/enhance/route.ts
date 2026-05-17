@@ -13,9 +13,24 @@ const ENHANCE_PROMPTS: Record<string, string> = {
 const enhanceCounts = new Map<string, { count: number; resetAt: number }>();
 const MAX_ENHANCES_PER_SESSION = 10;
 const SESSION_WINDOW_MS = 15 * 60 * 1000;
+const MAX_RATE_LIMIT_ENTRIES = 1000;
+
+function cleanupExpiredEntries(): void {
+  const now = Date.now();
+  for (const [key, entry] of enhanceCounts) {
+    if (now > entry.resetAt) {
+      enhanceCounts.delete(key);
+    }
+  }
+}
 
 function checkRateLimit(sessionId: string): boolean {
   const now = Date.now();
+
+  if (enhanceCounts.size > MAX_RATE_LIMIT_ENTRIES) {
+    cleanupExpiredEntries();
+  }
+
   const entry = enhanceCounts.get(sessionId);
   if (!entry || now > entry.resetAt) {
     enhanceCounts.set(sessionId, { count: 1, resetAt: now + SESSION_WINDOW_MS });
