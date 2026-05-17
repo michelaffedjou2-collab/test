@@ -44,10 +44,14 @@ export default function CreativeDesigner({ data }: { data: PortfolioData }) {
             className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight"
           >
             <span className="text-white">{data.fullName.split(" ")[0]}</span>
-            <br />
-            <span className="bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
-              {data.fullName.split(" ").slice(1).join(" ")}
-            </span>
+            {data.fullName.includes(" ") && (
+              <>
+                <br />
+                <span className="bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
+                  {data.fullName.split(" ").slice(1).join(" ")}
+                </span>
+              </>
+            )}
           </motion.h1>
 
           <motion.div
@@ -79,28 +83,6 @@ export default function CreativeDesigner({ data }: { data: PortfolioData }) {
           </motion.div>
         </div>
       </motion.section>
-
-      {/* À propos — large text section */}
-      {data.bio && (
-        <motion.section
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-50px" }}
-          className="py-20 px-8 md:px-16"
-        >
-          <motion.div variants={fadeIn}>
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-medium">À propos</span>
-            <div className="mt-6 grid md:grid-cols-2 gap-12 items-start">
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-800 leading-tight">
-                Vision <span className="text-purple-500">&</span> Créativité
-              </h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                {data.bio}
-              </p>
-            </div>
-          </motion.div>
-        </motion.section>
-      )}
 
       {/* Compétences — Bold colorful cards */}
       {data.skills.length > 0 && (
