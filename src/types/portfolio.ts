@@ -34,6 +34,14 @@ export interface ColorTheme {
   accent: string;
 }
 
+export type TemplateId =
+  | "modern-developer"
+  | "creative-designer"
+  | "corporate-professional"
+  | "student-junior"
+  | "freelancer"
+  | "educator";
+
 export interface PortfolioData {
   id: string;
   fullName: string;
@@ -46,4 +54,6 @@ export interface PortfolioData {
   contact: ContactInfo;
   colorTheme: ColorTheme;
   createdAt: string;
+  template?: TemplateId;
+  aiGenerated?: boolean;
 }
