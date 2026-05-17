@@ -246,7 +246,7 @@ function DefaultTemplate({ data }: { data: PortfolioData }) {
           {data.contact.website && (
             <motion.a variants={fadeInUp} href={data.contact.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl p-4 transition-all hover:scale-[1.02]" style={{ background: `${primary}10`, border: `1px solid ${primary}20` }}>
               <span className="text-xl">🌐</span>
-              <span className="text-sm text-gray-600">Website</span>
+              <span className="text-sm text-gray-600">Site web</span>
             </motion.a>
           )}
         </div>
@@ -293,7 +293,7 @@ function ContactSection({ data }: { data: PortfolioData }) {
         )}
         {data.contact.website && (
           <a href={data.contact.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 p-3 rounded-xl" style={{ background: `${primary}08` }}>
-            <span>🌐</span> Website
+            <span>🌐</span> Site web
           </a>
         )}
       </div>
