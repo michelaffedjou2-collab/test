@@ -1,0 +1,309 @@
+openapi: 3.1.0
+info:
+  title: API Fiches Pédagogiques
+  description: >
+    API pour importer des fiches pédagogiques générées par un GPT personnalisé.
+    Cette API permet de recevoir et stocker des fiches pédagogiques au format JSON,
+    puis de les afficher dans l'application web selon le canevas officiel.
+  version: "1.0.0"
+servers:
+  - url: https://votre-domaine.com
+    description: Serveur de production
+paths:
+  /api/fiches/import:
+    post:
+      operationId: importerFichePedagogique
+      summary: Importer une fiche pédagogique
+      description: >
+        Reçoit une fiche pédagogique générée par le GPT personnalisé et
+        l'enregistre dans l'application. La fiche sera automatiquement
+        affichée dans le canevas pédagogique.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FichePedagogiqueInput"
+      responses:
+        "201":
+          description: Fiche importée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fiche importée avec succès.
+                  fiche:
+                    $ref: "#/components/schemas/FichePedagogique"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "401":
+          description: En-tête d'autorisation manquant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "403":
+          description: Clé d'API non autorisée
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+
+  /api/fiches:
+    get:
+      operationId: listerFiches
+      summary: Lister toutes les fiches pédagogiques
+      description: Retourne la liste de toutes les fiches enregistrées, triées par date de modification.
+      responses:
+        "200":
+          description: Liste des fiches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fiches:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/FichePedagogique"
+
+    post:
+      operationId: creerFiche
+      summary: Créer une nouvelle fiche pédagogique
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FichePedagogiqueInput"
+      responses:
+        "201":
+          description: Fiche créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fiche:
+                    $ref: "#/components/schemas/FichePedagogique"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+
+  /api/fiches/{id}:
+    get:
+      operationId: obtenirFiche
+      summary: Obtenir une fiche pédagogique par identifiant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Fiche trouvée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fiche:
+                    $ref: "#/components/schemas/FichePedagogique"
+        "404":
+          description: Fiche non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+
+    put:
+      operationId: modifierFiche
+      summary: Modifier une fiche pédagogique existante
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FichePedagogiqueInput"
+      responses:
+        "200":
+          description: Fiche modifiée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fiche:
+                    $ref: "#/components/schemas/FichePedagogique"
+        "404":
+          description: Fiche non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+
+    delete:
+      operationId: supprimerFiche
+      summary: Supprimer une fiche pédagogique
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Fiche supprimée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fiche supprimée avec succès.
+        "404":
+          description: Fiche non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >
+        Clé secrète à fournir dans l'en-tête Authorization.
+        Format : Bearer <votre-clé-secrète>
+
+  schemas:
+    FichePedagogiqueInput:
+      type: object
+      description: Données d'une fiche pédagogique à créer ou importer
+      properties:
+        ficheDe:
+          type: string
+          description: "Fiche de (matière ou discipline)"
+          example: "Mathématiques"
+        dossierOuUnite:
+          type: string
+          description: "Dossier ou unité d'enseignement"
+          example: "Unité 3 — Géométrie"
+        san:
+          type: string
+          description: "Situation d'Apprentissage Numérique (S.A.N)"
+          example: "S.A.N 2"
+        sequence:
+          type: string
+          description: "Numéro ou titre de la séquence"
+          example: "Séquence 5"
+        date:
+          type: string
+          description: "Date du cours (format AAAA-MM-JJ recommandé)"
+          example: "2025-03-15"
+        cours:
+          type: string
+          description: "Nom ou intitulé du cours"
+          example: "Les triangles remarquables"
+        ficheNumero:
+          type: string
+          description: "Numéro de la fiche"
+          example: "12"
+        duree:
+          type: string
+          description: "Durée prévue de la séance"
+          example: "55 minutes"
+        elementsPlanification:
+          type: string
+          description: "Éléments de planification"
+          example: "Objectif : identifier les triangles remarquables"
+        contenuFormation:
+          type: string
+          description: "Contenu de formation"
+          example: "Triangle équilatéral, isocèle, rectangle"
+        competencesDisciplinaires:
+          type: string
+          description: "Compétences disciplinaires visées"
+          example: "Résoudre des problèmes de géométrie plane"
+        competencesTransversales:
+          type: string
+          description: "Compétences transversales"
+          example: "Raisonnement logique, communication"
+        connaissancesTechniques:
+          type: string
+          description: "Connaissances et techniques"
+          example: "Propriétés des triangles, théorème de Pythagore"
+        strategieObjetApprentissage:
+          type: string
+          description: "Stratégie objet d'apprentissage"
+          example: "Manipulation d'instruments de géométrie"
+        strategiesEnseignement:
+          type: string
+          description: "Stratégies d'enseignement, apprentissage et évaluation"
+          example: "Travail en groupe, exercices pratiques, évaluation formative"
+        materiel:
+          type: string
+          description: "Matériel nécessaire"
+          example: "Règle, compas, rapporteur, cahiers d'exercices"
+        deroulement:
+          type: string
+          description: "Déroulement détaillé de la séance (plusieurs lignes)"
+          example: "1. Rappel des notions précédentes (10 min)\n2. Présentation des triangles remarquables (15 min)\n3. Exercices guidés (20 min)\n4. Synthèse et correction (10 min)"
+        consignes:
+          type: string
+          description: "Consignes pour les élèves"
+          example: "Tracer un triangle équilatéral de 5 cm de côté"
+        resultatsAttendus:
+          type: string
+          description: "Résultats attendus"
+          example: "Les élèves identifient et tracent les triangles remarquables"
+
+    FichePedagogique:
+      allOf:
+        - $ref: "#/components/schemas/FichePedagogiqueInput"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Identifiant unique de la fiche
+            createdAt:
+              type: string
+              format: date-time
+              description: Date de création
+            updatedAt:
+              type: string
+              format: date-time
+              description: Date de dernière modification
+
+    Erreur:
+      type: object
+      properties:
+        erreur:
+          type: string
+          description: Message d'erreur en français
+          example: "Données invalides."
