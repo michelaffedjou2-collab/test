@@ -20,8 +20,8 @@ export async function POST(request: Request) {
 
     const now = new Date().toISOString();
     const fiche: FichePedagogique = {
-      id: uuidv4(),
       ...body,
+      id: uuidv4(),
       createdAt: now,
       updatedAt: now,
     };
