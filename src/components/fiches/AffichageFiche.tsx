@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FichePedagogique, FICHE_FIELDS } from "@/types/fiche";
+import { FichePedagogique, PLANNING_FIELDS } from "@/types/fiche";
 
 interface Props {
   ficheId: string;
@@ -46,9 +46,6 @@ export default function AffichageFiche({ ficheId }: Props) {
     );
   }
 
-  const shortFields = FICHE_FIELDS.filter((f) => f.type === "short");
-  const longFields = FICHE_FIELDS.filter((f) => f.type === "long");
-
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString("fr-FR", {
       day: "numeric",
@@ -73,7 +70,7 @@ export default function AffichageFiche({ ficheId }: Props) {
             Retour aux fiches
           </button>
           <h1 className="text-2xl font-bold text-[#2d2a26]">
-            {fiche.ficheDe || "Fiche pédagogique"}
+            {fiche.ficheDe || fiche.titre || "Fiche pédagogique"}
           </h1>
           <p className="text-xs text-[#8a8078] mt-1">
             Créée le {formatDate(fiche.createdAt)} — Modifiée le{" "}
@@ -106,54 +103,121 @@ export default function AffichageFiche({ ficheId }: Props) {
         </div>
       </div>
 
-      {/* Contenu de la fiche */}
+      {/* Contenu de la fiche — fidèle au canevas PDF */}
       <div className="glass rounded-2xl overflow-hidden">
-        {/* En-tête du canevas */}
+        {/* Titre du canevas */}
         <div className="bg-gradient-to-r from-[#b8860b]/10 to-[#d4a855]/5 px-6 py-4 border-b border-[#d4c5a9]/20">
-          <h2 className="text-lg font-bold text-[#2d2a26] text-center">
+          <h2 className="text-lg font-bold text-[#2d2a26] text-center uppercase tracking-wide">
             Fiche Pédagogique
           </h2>
         </div>
 
-        {/* Champs courts en grille */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-[#d4c5a9]/20">
-          {shortFields.map((field, i) => (
-            <div
-              key={field.key}
-              className={`px-4 py-3 ${
-                i < shortFields.length - (shortFields.length % 4 || 4)
-                  ? "border-b border-[#d4c5a9]/10"
-                  : ""
-              } ${(i + 1) % 4 !== 0 ? "border-r border-[#d4c5a9]/10" : ""}`}
-            >
-              <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">
-                {field.label}
-              </p>
-              <p className="text-sm text-[#2d2a26] font-medium">
-                {fiche[field.key] || "—"}
-              </p>
-            </div>
-          ))}
+        {/* ═══ EN-TÊTE — Structure fidèle au canevas PDF ═══ */}
+
+        {/* Ligne 1 : Fiche de + Date */}
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] border-b border-[#d4c5a9]/20">
+          <div className="px-4 py-3 sm:border-r border-[#d4c5a9]/10">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Fiche de</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.ficheDe || "—"}</p>
+          </div>
+          <div className="px-4 py-3 sm:w-48">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Date</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.date || "—"}</p>
+          </div>
         </div>
 
-        {/* Sections longues */}
-        {longFields.map((field) => {
+        {/* Ligne 2 : Dossier ou Unité N° */}
+        <div className="border-b border-[#d4c5a9]/20 px-4 py-3">
+          <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Dossier ou unité N°</p>
+          <p className="text-sm text-[#2d2a26] font-medium">{fiche.dossierOuUnite || "—"}</p>
+        </div>
+
+        {/* Ligne 3 : S.A.N° + Séquence N° + Cours */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 border-b border-[#d4c5a9]/20">
+          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/10">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">S.A.N°</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.san || "—"}</p>
+          </div>
+          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/10">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Séquence N°</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.sequence || "—"}</p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Cours</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.cours || "—"}</p>
+          </div>
+        </div>
+
+        {/* Ligne 4 : Titre + Fiche N° + Durée */}
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] border-b border-[#d4c5a9]/20">
+          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/10">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Titre</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.titre || "—"}</p>
+          </div>
+          <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/10 sm:w-36">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Fiche N°</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.ficheNumero || "—"}</p>
+          </div>
+          <div className="px-4 py-3 sm:w-36">
+            <p className="text-[10px] uppercase tracking-wider text-[#8a8078] font-semibold mb-0.5">Durée</p>
+            <p className="text-sm text-[#2d2a26] font-medium">{fiche.duree || "—"}</p>
+          </div>
+        </div>
+
+        {/* ═══ SECTIONS DE PLANIFICATION ═══ */}
+        {PLANNING_FIELDS.map((field) => {
           const value = fiche[field.key];
-          if (!value) return null;
           return (
-            <div
-              key={field.key}
-              className="px-6 py-4 border-b border-[#d4c5a9]/10 last:border-b-0"
-            >
+            <div key={field.key} className="px-6 py-4 border-b border-[#d4c5a9]/10">
               <h3 className="text-xs uppercase tracking-wider text-[#8B6914] font-semibold mb-2">
                 {field.label}
               </h3>
-              <div className="text-sm text-[#2d2a26] leading-relaxed whitespace-pre-wrap">
-                {value}
+              <div className="text-sm text-[#2d2a26] leading-relaxed whitespace-pre-wrap min-h-[1.5em]">
+                {value || ""}
               </div>
             </div>
           );
         })}
+
+        {/* ═══ DÉROULEMENT — Grand tableau avec Consignes + Résultats ═══ */}
+        <div className="border-t-2 border-[#d4c5a9]/40">
+          <div className="bg-gradient-to-r from-[#b8860b]/15 to-[#d4a855]/8 px-6 py-4 border-b border-[#d4c5a9]/30">
+            <h2 className="text-base font-bold text-[#2d2a26] text-center uppercase tracking-wide">
+              Déroulement
+            </h2>
+          </div>
+
+          {/* Zone déroulement libre */}
+          {fiche.deroulement && (
+            <div className="px-6 py-4 border-b border-[#d4c5a9]/20">
+              <div className="text-sm text-[#2d2a26] leading-relaxed whitespace-pre-wrap">
+                {fiche.deroulement}
+              </div>
+            </div>
+          )}
+
+          {/* Consignes + Résultats Attendus côte à côte */}
+          <div className="grid grid-cols-1 lg:grid-cols-[7fr_3fr]">
+            {/* En-têtes */}
+            <div className="bg-[#b8860b]/8 px-5 py-2.5 border-b border-[#d4c5a9]/20 lg:border-r">
+              <span className="text-xs font-bold text-[#2d2a26] uppercase tracking-wider">Consignes</span>
+            </div>
+            <div className="bg-[#b8860b]/8 px-5 py-2.5 border-b border-[#d4c5a9]/20">
+              <span className="text-xs font-bold text-[#2d2a26] uppercase tracking-wider">Résultats attendus</span>
+            </div>
+            {/* Contenu */}
+            <div className="px-6 py-4 lg:border-r border-[#d4c5a9]/20 min-h-[120px]">
+              <div className="text-sm text-[#2d2a26] leading-relaxed whitespace-pre-wrap">
+                {fiche.consignes || ""}
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t lg:border-t-0 border-[#d4c5a9]/20 min-h-[120px]">
+              <div className="text-sm text-[#2d2a26] leading-relaxed whitespace-pre-wrap">
+                {fiche.resultatsAttendus || ""}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Bouton modifier */}

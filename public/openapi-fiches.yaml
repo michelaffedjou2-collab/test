@@ -237,6 +237,10 @@ components:
           type: string
           description: "Durée prévue de la séance"
           example: "55 minutes"
+        titre:
+          type: string
+          description: "Titre de la leçon"
+          example: "Les triangles remarquables"
         elementsPlanification:
           type: string
           description: "Éléments de planification"

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import {
   FichePedagogique,
   FicheFormData,
-  FICHE_FIELDS,
+  HEADER_FIELDS,
+  PLANNING_FIELDS,
   createEmptyFicheForm,
 } from "@/types/fiche";
 
@@ -113,8 +114,11 @@ export default function FormulaireFiche({ ficheId }: Props) {
     );
   }
 
-  const shortFields = FICHE_FIELDS.filter((f) => f.type === "short");
-  const longFields = FICHE_FIELDS.filter((f) => f.type === "long");
+  const inputClass =
+    "w-full px-3 py-2 rounded-lg border border-[#d4c5a9]/40 bg-white/60 focus:border-[#b8860b]/50 focus:outline-none focus:ring-2 focus:ring-[#b8860b]/10 text-sm transition-all placeholder:text-[#c4b8a8]";
+
+  const textareaClass =
+    "w-full px-4 py-3 rounded-xl border border-[#d4c5a9]/40 bg-white/60 focus:border-[#b8860b]/50 focus:outline-none focus:ring-2 focus:ring-[#b8860b]/10 text-sm transition-all resize-y placeholder:text-[#c4b8a8] leading-relaxed";
 
   return (
     <div className="p-6 lg:p-8 max-w-5xl mx-auto">
@@ -137,44 +141,214 @@ export default function FormulaireFiche({ ficheId }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* En-tête de la fiche — champs courts */}
-        <div className="glass rounded-2xl p-6">
-          <h2 className="text-sm font-semibold text-[#8B6914] uppercase tracking-wider mb-4">
-            Informations générales
+        {/* ═══ EN-TÊTE — Structure fidèle au canevas PDF ═══ */}
+        <div className="glass rounded-2xl overflow-hidden">
+          <h2 className="text-sm font-semibold text-[#8B6914] uppercase tracking-wider px-6 pt-5 pb-3">
+            En-tête de la fiche
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {shortFields.map((field) => (
-              <div key={field.key}>
-                <label className="block text-xs font-medium text-[#6b6560] mb-1.5">
+
+          {/* Ligne 1 : FICHE DE + Date */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] border-t border-[#d4c5a9]/30">
+            <div className="px-5 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/20">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                {HEADER_FIELDS[0].label}
+              </label>
+              <input
+                type="text"
+                value={formData.ficheDe}
+                onChange={(e) => handleChange("ficheDe", e.target.value)}
+                className={inputClass}
+                placeholder="Ex: Mathématiques"
+              />
+            </div>
+            <div className="px-5 py-3 sm:w-48">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Date
+              </label>
+              <input
+                type="date"
+                value={formData.date}
+                onChange={(e) => handleChange("date", e.target.value)}
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          {/* Ligne 2 : DOSSIER OU UNITÉ N° */}
+          <div className="border-t border-[#d4c5a9]/20 px-5 py-3">
+            <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+              Dossier ou unité N°
+            </label>
+            <input
+              type="text"
+              value={formData.dossierOuUnite}
+              onChange={(e) => handleChange("dossierOuUnite", e.target.value)}
+              className={inputClass}
+              placeholder="Dossier ou unité N°"
+            />
+          </div>
+
+          {/* Ligne 3 : S.A.N° + SÉQUENCE N° + Cours */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-[#d4c5a9]/20">
+            <div className="px-5 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/20">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                S.A.N°
+              </label>
+              <input
+                type="text"
+                value={formData.san}
+                onChange={(e) => handleChange("san", e.target.value)}
+                className={inputClass}
+                placeholder="S.A.N°"
+              />
+            </div>
+            <div className="px-5 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/20">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Séquence N°
+              </label>
+              <input
+                type="text"
+                value={formData.sequence}
+                onChange={(e) => handleChange("sequence", e.target.value)}
+                className={inputClass}
+                placeholder="Séquence N°"
+              />
+            </div>
+            <div className="px-5 py-3">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Cours
+              </label>
+              <input
+                type="text"
+                value={formData.cours}
+                onChange={(e) => handleChange("cours", e.target.value)}
+                className={inputClass}
+                placeholder="Cours"
+              />
+            </div>
+          </div>
+
+          {/* Ligne 4 : TITRE + Fiche N° + Durée */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] border-t border-[#d4c5a9]/20">
+            <div className="px-5 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/20">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Titre
+              </label>
+              <input
+                type="text"
+                value={formData.titre}
+                onChange={(e) => handleChange("titre", e.target.value)}
+                className={inputClass}
+                placeholder="Titre de la leçon"
+              />
+            </div>
+            <div className="px-5 py-3 border-b sm:border-b-0 sm:border-r border-[#d4c5a9]/20 sm:w-36">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Fiche N°
+              </label>
+              <input
+                type="text"
+                value={formData.ficheNumero}
+                onChange={(e) => handleChange("ficheNumero", e.target.value)}
+                className={inputClass}
+                placeholder="N°"
+              />
+            </div>
+            <div className="px-5 py-3 sm:w-36">
+              <label className="block text-xs font-medium text-[#6b6560] mb-1.5 uppercase tracking-wider">
+                Durée
+              </label>
+              <input
+                type="text"
+                value={formData.duree}
+                onChange={(e) => handleChange("duree", e.target.value)}
+                className={inputClass}
+                placeholder="Ex: 55 min"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ═══ SECTIONS DE PLANIFICATION ═══ */}
+        <div className="glass rounded-2xl overflow-hidden">
+          <h2 className="text-sm font-semibold text-[#8B6914] uppercase tracking-wider px-6 pt-5 pb-3">
+            Planification
+          </h2>
+          <div className="divide-y divide-[#d4c5a9]/20 border-t border-[#d4c5a9]/30">
+            {PLANNING_FIELDS.map((field) => (
+              <div key={field.key} className="px-5 py-4">
+                <label className="block text-xs font-semibold text-[#8B6914] uppercase tracking-wider mb-2">
                   {field.label}
                 </label>
-                <input
-                  type={field.key === "date" ? "date" : "text"}
+                <textarea
                   value={formData[field.key]}
                   onChange={(e) => handleChange(field.key, e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-[#d4c5a9]/40 bg-white/60 focus:border-[#b8860b]/50 focus:outline-none focus:ring-2 focus:ring-[#b8860b]/10 text-sm transition-all placeholder:text-[#c4b8a8]"
-                  placeholder={field.label}
+                  rows={3}
+                  className={textareaClass}
+                  placeholder={`Saisissez ${field.label.toLowerCase()}…`}
                 />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Sections longues */}
-        {longFields.map((field) => (
-          <div key={field.key} className="glass rounded-2xl p-6">
-            <label className="block text-sm font-semibold text-[#8B6914] uppercase tracking-wider mb-3">
-              {field.label}
+        {/* ═══ DÉROULEMENT — Grand tableau avec Consignes + Résultats ═══ */}
+        <div className="glass rounded-2xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#b8860b]/15 to-[#d4a855]/8 px-6 py-4 border-b border-[#d4c5a9]/30">
+            <h2 className="text-lg font-bold text-[#2d2a26] text-center uppercase tracking-wide">
+              Déroulement
+            </h2>
+          </div>
+
+          {/* Zone de déroulement libre */}
+          <div className="px-5 py-4 border-b border-[#d4c5a9]/20">
+            <label className="block text-xs font-semibold text-[#8B6914] uppercase tracking-wider mb-2">
+              Description du déroulement
             </label>
             <textarea
-              value={formData[field.key]}
-              onChange={(e) => handleChange(field.key, e.target.value)}
-              rows={field.key === "deroulement" ? 10 : 4}
-              className="w-full px-4 py-3 rounded-xl border border-[#d4c5a9]/40 bg-white/60 focus:border-[#b8860b]/50 focus:outline-none focus:ring-2 focus:ring-[#b8860b]/10 text-sm transition-all resize-y placeholder:text-[#c4b8a8] leading-relaxed"
-              placeholder={`Saisissez ${field.label.toLowerCase()}…`}
+              value={formData.deroulement}
+              onChange={(e) => handleChange("deroulement", e.target.value)}
+              rows={8}
+              className={textareaClass}
+              placeholder="Décrivez le déroulement de la séance étape par étape…"
             />
           </div>
-        ))}
+
+          {/* Consignes + Résultats Attendus côte à côte */}
+          <div className="grid grid-cols-1 lg:grid-cols-[7fr_3fr] border-t border-[#d4c5a9]/20">
+            {/* En-têtes des colonnes */}
+            <div className="bg-gradient-to-r from-[#b8860b]/10 to-[#d4a855]/5 px-5 py-2.5 border-b border-[#d4c5a9]/20 lg:border-r">
+              <span className="text-xs font-bold text-[#2d2a26] uppercase tracking-wider">
+                Consignes
+              </span>
+            </div>
+            <div className="bg-gradient-to-r from-[#b8860b]/10 to-[#d4a855]/5 px-5 py-2.5 border-b border-[#d4c5a9]/20">
+              <span className="text-xs font-bold text-[#2d2a26] uppercase tracking-wider">
+                Résultats attendus
+              </span>
+            </div>
+
+            {/* Contenu des colonnes */}
+            <div className="px-5 py-4 lg:border-r border-[#d4c5a9]/20">
+              <textarea
+                value={formData.consignes}
+                onChange={(e) => handleChange("consignes", e.target.value)}
+                rows={8}
+                className={textareaClass}
+                placeholder="Saisissez les consignes…"
+              />
+            </div>
+            <div className="px-5 py-4 border-t lg:border-t-0 border-[#d4c5a9]/20">
+              <textarea
+                value={formData.resultatsAttendus}
+                onChange={(e) => handleChange("resultatsAttendus", e.target.value)}
+                rows={8}
+                className={textareaClass}
+                placeholder="Saisissez les résultats attendus…"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Boutons d'action */}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">

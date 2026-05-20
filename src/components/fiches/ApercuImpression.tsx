@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FichePedagogique, FICHE_FIELDS } from "@/types/fiche";
+import { FichePedagogique, PLANNING_FIELDS } from "@/types/fiche";
 
 interface Props {
   ficheId: string;
@@ -45,9 +45,6 @@ export default function ApercuImpression({ ficheId }: Props) {
     );
   }
 
-  const shortFields = FICHE_FIELDS.filter((f) => f.type === "short");
-  const longFields = FICHE_FIELDS.filter((f) => f.type === "long");
-
   return (
     <>
       {/* Barre d'outils (cachée à l'impression) */}
@@ -79,55 +76,122 @@ export default function ApercuImpression({ ficheId }: Props) {
         </div>
       </div>
 
-      {/* Document imprimable */}
+      {/* Document imprimable — fidèle au canevas PDF */}
       <div className="print:mt-0 mt-16 max-w-4xl mx-auto p-6 lg:p-8">
-        <div className="bg-white rounded-lg shadow-sm print:shadow-none border border-gray-200 print:border-gray-400">
-          {/* Titre */}
-          <div className="border-b-2 border-gray-800 px-8 py-5 text-center">
+        <div className="bg-white rounded-lg shadow-sm print:shadow-none border border-gray-300 print:border-gray-400">
+
+          {/* ═══ TITRE PRINCIPAL ═══ */}
+          <div className="border-b-2 border-gray-800 px-8 py-4 text-center">
             <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
               Fiche Pédagogique
             </h1>
           </div>
 
-          {/* Grille d'informations */}
-          <div className="grid grid-cols-4 print:grid-cols-4">
-            {shortFields.map((field, i) => (
-              <div
-                key={field.key}
-                className={`px-4 py-2.5 border-b border-gray-300 ${
-                  (i + 1) % 4 !== 0 ? "border-r border-gray-300" : ""
-                }`}
-              >
-                <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold mb-0.5">
-                  {field.label}
-                </p>
-                <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">
-                  {fiche[field.key] || ""}
-                </p>
-              </div>
-            ))}
+          {/* ═══ EN-TÊTE — Structure fidèle au canevas PDF ═══ */}
+
+          {/* Ligne 1 : FICHE DE + Date */}
+          <div className="grid grid-cols-[1fr_auto] border-b border-gray-300">
+            <div className="px-4 py-2 border-r border-gray-300">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Fiche de :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.ficheDe || ""}</p>
+            </div>
+            <div className="px-4 py-2 w-40">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Date :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.date || ""}</p>
+            </div>
           </div>
 
-          {/* Sections détaillées */}
-          {longFields.map((field) => (
-            <div
-              key={field.key}
-              className="border-b border-gray-300 last:border-b-0"
-            >
-              <div className="px-8 py-3">
-                <h3 className="text-[10px] uppercase tracking-wider text-gray-600 font-bold mb-1.5 border-b border-gray-200 pb-1">
-                  {field.label}
+          {/* Ligne 2 : DOSSIER OU UNITÉ N° */}
+          <div className="border-b border-gray-300 px-4 py-2">
+            <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Dossier ou unité N° :</p>
+            <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.dossierOuUnite || ""}</p>
+          </div>
+
+          {/* Ligne 3 : S.A.N° + SÉQUENCE N° + Cours */}
+          <div className="grid grid-cols-3 border-b border-gray-300">
+            <div className="px-4 py-2 border-r border-gray-300">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">S.A.N° :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.san || ""}</p>
+            </div>
+            <div className="px-4 py-2 border-r border-gray-300">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Séquence N° :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.sequence || ""}</p>
+            </div>
+            <div className="px-4 py-2">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Cours :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.cours || ""}</p>
+            </div>
+          </div>
+
+          {/* Ligne 4 : TITRE + Fiche N° + Durée */}
+          <div className="grid grid-cols-[1fr_auto_auto] border-b border-gray-300">
+            <div className="px-4 py-2 border-r border-gray-300">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Titre :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.titre || ""}</p>
+            </div>
+            <div className="px-4 py-2 border-r border-gray-300 w-28">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Fiche N° :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.ficheNumero || ""}</p>
+            </div>
+            <div className="px-4 py-2 w-28">
+              <p className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Durée :</p>
+              <p className="text-xs text-gray-900 font-medium min-h-[1.2em]">{fiche.duree || ""}</p>
+            </div>
+          </div>
+
+          {/* ═══ SECTIONS DE PLANIFICATION ═══ */}
+          {PLANNING_FIELDS.map((field) => (
+            <div key={field.key} className="border-b border-gray-300">
+              <div className="px-6 py-2.5">
+                <h3 className="text-[10px] uppercase tracking-wider text-gray-600 font-bold mb-1 border-b border-gray-200 pb-0.5">
+                  {field.label} :
                 </h3>
-                <div
-                  className={`text-xs text-gray-800 leading-relaxed whitespace-pre-wrap ${
-                    field.key === "deroulement" ? "min-h-[200px]" : "min-h-[40px]"
-                  }`}
-                >
+                <div className="text-xs text-gray-800 leading-relaxed whitespace-pre-wrap min-h-[28px]">
                   {fiche[field.key] || ""}
                 </div>
               </div>
             </div>
           ))}
+
+          {/* ═══ DÉROULEMENT — Grand tableau ═══ */}
+          <div className="border-b-2 border-gray-800">
+            <div className="bg-gray-100 px-6 py-3 border-b-2 border-gray-800 text-center">
+              <h2 className="text-base font-bold text-gray-900 uppercase tracking-wider">
+                Déroulement
+              </h2>
+            </div>
+
+            {/* Zone libre déroulement */}
+            {fiche.deroulement && (
+              <div className="px-6 py-3 border-b border-gray-300">
+                <div className="text-xs text-gray-800 leading-relaxed whitespace-pre-wrap min-h-[60px]">
+                  {fiche.deroulement}
+                </div>
+              </div>
+            )}
+
+            {/* Tableau Consignes + Résultats Attendus */}
+            <div className="grid grid-cols-[7fr_3fr]">
+              {/* En-têtes avec fond hachuré (simulé) */}
+              <div className="bg-gray-200 px-4 py-2 border-b border-gray-800 border-r border-r-gray-800 text-center">
+                <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider">Consignes</span>
+              </div>
+              <div className="bg-gray-200 px-4 py-2 border-b border-gray-800 text-center">
+                <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider">Résultats attendus</span>
+              </div>
+              {/* Contenu */}
+              <div className="px-4 py-3 border-r border-gray-800 min-h-[200px]">
+                <div className="text-xs text-gray-800 leading-relaxed whitespace-pre-wrap">
+                  {fiche.consignes || ""}
+                </div>
+              </div>
+              <div className="px-4 py-3 min-h-[200px]">
+                <div className="text-xs text-gray-800 leading-relaxed whitespace-pre-wrap">
+                  {fiche.resultatsAttendus || ""}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
