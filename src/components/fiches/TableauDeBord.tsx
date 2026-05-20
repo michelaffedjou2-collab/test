@@ -41,7 +41,8 @@ export default function TableauDeBord() {
       (f.ficheDe || "").toLowerCase().includes(q) ||
       (f.cours || "").toLowerCase().includes(q) ||
       (f.sequence || "").toLowerCase().includes(q) ||
-      (f.dossierOuUnite || "").toLowerCase().includes(q)
+      (f.dossierOuUnite || "").toLowerCase().includes(q) ||
+      (f.titre || "").toLowerCase().includes(q)
     );
   });
 
