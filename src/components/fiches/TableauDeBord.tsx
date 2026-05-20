@@ -38,10 +38,10 @@ export default function TableauDeBord() {
   const fichesFiltrees = fiches.filter((f) => {
     const q = recherche.toLowerCase();
     return (
-      f.ficheDe.toLowerCase().includes(q) ||
-      f.cours.toLowerCase().includes(q) ||
-      f.sequence.toLowerCase().includes(q) ||
-      f.dossierOuUnite.toLowerCase().includes(q)
+      (f.ficheDe || "").toLowerCase().includes(q) ||
+      (f.cours || "").toLowerCase().includes(q) ||
+      (f.sequence || "").toLowerCase().includes(q) ||
+      (f.dossierOuUnite || "").toLowerCase().includes(q)
     );
   });
 
